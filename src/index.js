@@ -8,7 +8,7 @@ import './main.scss'
 import reducer from "./reducer";
 import App from "./App";
 
-const store = createStore(reducer);
+let store = createStore(reducer);
 
 ReactDOM.render(
   <React.StrictMode>

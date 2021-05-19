@@ -19,6 +19,6 @@ export const endLoad = () => ({
 });
 
 export const addTodo = (name) => ({
-  type: 'ADD_TODO',
+	type: 'ADD_TODO',
 	payload: name
 });

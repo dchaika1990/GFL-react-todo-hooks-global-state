@@ -4,7 +4,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-	const {todos} = state;
+	let {todos} = state;
 	switch (action.type) {
 		case 'FETCH_TODOS_START':
 			return {...state, fetching: true};
@@ -30,7 +30,9 @@ const reducer = (state = initialState, action) => {
 				name: action.payload,
 				isActive: false
 			}
-			return {...state, todos: [...todos.in_progress, newTodo]};
+			todos.in_progress.push(newTodo)
+			console.log({...state, todos: todos})
+			return {...state, todos: todos};
 		case 'DELETE_TODO_ITEM':
 			// const id = action.payload;
 			// const { todos } = state;
