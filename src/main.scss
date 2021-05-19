@@ -1,0 +1,24 @@
+.list-group-item {
+    background-color: #ffe5c270;
+    .btn{
+        position: absolute;
+        right: 3px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .btn-primary {
+        right: 55px;
+    }
+}
+
+.badge{
+    margin-right: 5px;
+    &.badge-secondary{
+        color: #fff;
+        background-color: #6c757d;
+    }
+}
+
+.pull-right{
+    float: right;
+}
