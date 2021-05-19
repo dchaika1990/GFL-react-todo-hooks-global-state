@@ -62,17 +62,23 @@ const App = props => {
 		</>
 	);
 
-	const renderInProgressItem = ({name}) => (
-		<>
-			{name}
-			<Button type={"button"} color="primary">
-				Start
-			</Button>
-			<Button type={"button"} color="danger">
-				Del
-			</Button>
-		</>
-	);
+	const renderInProgressItem = ({name, isActive, nextElement}) => {
+		return (
+			<>
+				{name}
+				{nextElement && (
+					<>
+						<Button type="button" color="primary">Start</Button>
+					</>
+				)}
+				{!isActive && (
+					<>
+						<Button type="button" color="danger">Del</Button>
+					</>
+				)}
+			</>
+		)
+	}
 
 	return (
 		<Container>
@@ -104,8 +110,10 @@ const App = props => {
 						loading
 					) : (
 						<List>
-							{todos.in_progress.map(item => {
-								const {id} = item;
+							{todos.in_progress.map((item, index) => {
+								const {id, isActive} = item;
+
+								if (isActive) todos.in_progress[index + 1].nextElement = true;
 
 								return (
 									<ListItem
@@ -117,7 +125,7 @@ const App = props => {
 							})}
 						</List>
 					)}
-					<p>Things to do: {0}</p>
+					<p>Things to do: {todos ? todos.in_progress.length : 0}</p>
 				</Col>
 				<Col sm="6">
 					<h3>Done</h3>
@@ -132,7 +140,7 @@ const App = props => {
 						</List>
 					)}
 
-					<p>Done: {0}</p>
+					<p>Done: {todos ? todos.done.length : 0}</p>
 				</Col>
 			</Row>
 		</Container>
