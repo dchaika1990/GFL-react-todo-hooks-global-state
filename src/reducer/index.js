@@ -39,7 +39,6 @@ const reducer = (state = initialState, action) => {
 				isActive: false
 			}
 			todos.in_progress.push(newTodoItem)
-
 			return {...state, todos: todos};
 		case 'DELETE_TODO_ITEM':
 			const id = action.payload;

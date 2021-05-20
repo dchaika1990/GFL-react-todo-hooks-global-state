@@ -2,13 +2,17 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import List from './components/list-component';
 import ListItem from './components/list-item-component';
-import {Badge, Button, Container, Row, Col, Form, FormGroup, Label, Input} from 'reactstrap'
+import {Badge, Button, Container, Row, Col, Input} from 'reactstrap'
 import {setTodos, startLoad, endLoad, addTodo, deleteTodo, makeActive} from './actions';
+import AddNewComponent from "./components/add-new-todo";
 
 const App = props => {
 	const dispatch = useDispatch();
 	let todos = useSelector(state => state.todos);
 	let fetching = useSelector(state => state.fetching);
+
+	const [searchKey, setSearchKey] = useState('');
+	const [newTodoName, setNewTodo] = useState('');
 
 	useEffect(() => {
 		fetch('/todos.json')
@@ -19,9 +23,6 @@ const App = props => {
 				dispatch(endLoad())
 			})
 	}, [])
-
-	const [newTodoName, setNewTodo] = useState('');
-	const [searchKey, setSearchKey] = useState('');
 
 	const filteredTodos = useMemo(() => {
 		if (searchKey) {
@@ -37,11 +38,10 @@ const App = props => {
 		return todos
 	}, [todos, searchKey])
 
-	const addTodoHandler = (e) => {
-		e.preventDefault();
-		dispatch(addTodo(newTodoName))
-		setNewTodo('');
-	}
+	// const addTodoHandler = (newTodoName) => {
+	// 	console.log(newTodoName)
+	// 	dispatch(addTodo(newTodoName))
+	// }
 
 	const loading = <p>Loading...</p>;
 
@@ -100,22 +100,10 @@ const App = props => {
 			<h2>Todos</h2>
 			<Row>
 				<Col>
-					<Form onSubmit={addTodoHandler}>
-						<FormGroup>
-							<Label for='addInput'>New Todo Item: </Label>
-							<Input
-								id='addInput'
-								type='text'
-								className='form-control'
-								placeholder='New todo name'
-								value={newTodoName}
-								onChange={(e)=>setNewTodo(e.target.value)}
-							/>
-						</FormGroup>
-						<Button type='submit' color="success" className='pull-right'>
-							Add New Item
-						</Button>
-					</Form>
+					<AddNewComponent
+						newTodoName={newTodoName}
+						setNewTodo={setNewTodo}
+					/>
 				</Col>
 			</Row>
 			<hr/>
@@ -128,7 +116,6 @@ const App = props => {
 						<List>
 							{filteredTodos.in_progress.map((item, index) => {
 								const {id, isActive} = item;
-								// if (isActive && filteredTodos.in_progress[index + 1]) filteredTodos.in_progress[index + 1].nextElement = true;
 								if (isActive && todos.in_progress[index + 1]) todos.in_progress[index + 1].nextElement = true;
 								return (
 									<ListItem
