@@ -1,10 +1,10 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import List from './components/list-component';
-import ListItem from './components/list-item-component';
-import {Badge, Button, Container, Row, Col, Input} from 'reactstrap'
-import {setTodos, startLoad, endLoad, addTodo, deleteTodo, makeActive} from './actions';
+import {Container, Row, Col, Input} from 'reactstrap'
+import {setTodos, startLoad, endLoad} from './actions';
 import AddNewComponent from "./components/add-new-todo";
+import TodoInProgress from "./components/todo-in-progress-component";
+import TodoDone from "./components/todo-done-component";
 
 const App = props => {
 	const dispatch = useDispatch();
@@ -29,7 +29,6 @@ const App = props => {
 			let filterTodos = {};
 			Object.keys(todos).forEach(key => {
 				let filterTodo = todos[key].filter(item => item.name.toLowerCase().includes(searchKey.toLowerCase()))
-				console.log(...filterTodo)
 				filterTodos[key] = []
 				filterTodos[key].push(...filterTodo)
 			})
@@ -38,47 +37,7 @@ const App = props => {
 		return todos
 	}, [todos, searchKey])
 
-	// const addTodoHandler = (newTodoName) => {
-	// 	console.log(newTodoName)
-	// 	dispatch(addTodo(newTodoName))
-	// }
-
 	const loading = <p>Loading...</p>;
-
-	const renderDoneItem = ({name, finishedTime}) => (
-		<>
-			<Badge color="secondary" pill>
-				{new Date(finishedTime).toLocaleTimeString()}
-			</Badge>
-			{name}
-		</>
-	);
-
-	const renderInProgressItem = ({name, isActive, nextElement, id}) => {
-		return (
-			<>
-				{name}
-				{nextElement && !isActive && (
-					<>
-						<Button
-							type="button"
-							color="primary"
-							onClick={(e) => dispatch(makeActive(id))}
-						>Start</Button>
-					</>
-				)}
-				{!isActive && (
-					<>
-						<Button
-							type="button"
-							color="danger"
-							onClick={() => dispatch(deleteTodo(id))}
-						>Del</Button>
-					</>
-				)}
-			</>
-		)
-	}
 
 	return (
 		<Container>
@@ -87,7 +46,6 @@ const App = props => {
 			<Row>
 				<Col>
 					<Input
-						id='addInput'
 						type='text'
 						className='form-control'
 						placeholder='Search todos'
@@ -110,39 +68,20 @@ const App = props => {
 			<Row>
 				<Col sm="6">
 					<h3>Todos in progress</h3>
-					{fetching ? (
-						loading
-					) : (
-						<List>
-							{filteredTodos.in_progress.map((item, index) => {
-								const {id, isActive} = item;
-								if (isActive && todos.in_progress[index + 1]) todos.in_progress[index + 1].nextElement = true;
-								return (
-									<ListItem
-										key={id}
-										item={item}
-										render={renderInProgressItem}
-									/>
-								);
-							})}
-						</List>
-					)}
-					<p>Things to do: {filteredTodos?.in_progress.length}</p>
+					<TodoInProgress
+						fetching={fetching}
+						loading={loading}
+						filteredTodos={filteredTodos}
+						todos={todos}
+					/>
 				</Col>
 				<Col sm="6">
 					<h3>Done</h3>
-
-					{fetching ? (
-						loading
-					) : (
-						<List>
-							{filteredTodos.done.map(({id, ...item}) => (
-								<ListItem key={id} item={item} render={renderDoneItem}/>
-							))}
-						</List>
-					)}
-
-					<p>Done: {filteredTodos?.done.length}</p>
+					<TodoDone
+						fetching={fetching}
+						loading={loading}
+						filteredTodos={filteredTodos}
+					/>
 				</Col>
 			</Row>
 		</Container>
