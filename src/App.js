@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Container, Row, Col, Input} from 'reactstrap'
 import {setTodos, startLoad, endLoad} from './actions';
@@ -41,10 +41,11 @@ const App = props => {
 
 	return (
 		<Container>
-			<h1>Todo React APP</h1>
-			<h2>Todos search</h2>
 			<Row>
-				<Col>
+				<Col sm={6}>
+					<h2>Todo React APP</h2>
+				</Col>
+				<Col sm={6}>
 					<Input
 						type='text'
 						className='form-control'
