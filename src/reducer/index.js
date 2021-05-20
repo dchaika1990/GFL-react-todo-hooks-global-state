@@ -25,31 +25,22 @@ const reducer = (state = initialState, action) => {
 
 			return {state, todos: updatedTodos};
 		case 'ADD_TODO':
-			const newTodo = {
+			const newTodoItem = {
 				id: Date.now(),
 				name: action.payload,
 				isActive: false
 			}
-			todos.in_progress.push(newTodo)
+			todos.in_progress.push(newTodoItem)
 			console.log({...state, todos: todos})
 			return {...state, todos: todos};
 		case 'DELETE_TODO_ITEM':
-			// const id = action.payload;
-			// const { todos } = state;
-			// const itemIdx = todos.findIndex(item => item.id === id);
-
-			// if (itemIdx === -1) return state;
-
-			// const newItems = [
-			//   ...todos.slice(0, itemIdx),
-			//   ...todos.slice(itemIdx + 1),
-			// ];
-
-			// const newItems = todos.filter(item => item.id !== id);
-			// const newItems = todos.slice();
-			// newItems.splice(itemIdx, 1);
-
-			return {...state};
+			const id = action.payload;
+			const newItemsInProgress = todos.in_progress.filter(item => item.id !== id);
+			const newTodo = {
+				in_progress: newItemsInProgress,
+				done: todos.done
+			}
+			return {...state, todos: newTodo}
 		default:
 			return state;
 	}

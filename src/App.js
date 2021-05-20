@@ -4,7 +4,7 @@ import List from './components/List';
 import ListItem from './components/ListItem';
 import {Badge, Button, Container, Row, Col, Form, FormGroup, Label, Input} from 'reactstrap'
 
-import {setTodos, startLoad, endLoad, addTodo} from './actions';
+import {setTodos, startLoad, endLoad, addTodo, deleteTodo} from './actions';
 // import * as actions from './actions';
 // import {addTodo} from "./actions";
 
@@ -34,7 +34,6 @@ const App = props => {
 	}
 
 	useEffect(() => {
-		console.log(1)
 		// setNewTodo(state => ({
 		// 	...state,
 		// 	in_progress:
@@ -56,7 +55,7 @@ const App = props => {
 		</>
 	);
 
-	const renderInProgressItem = ({name, isActive, nextElement}) => {
+	const renderInProgressItem = ({name, isActive, nextElement, id}) => {
 		return (
 			<>
 				{name}
@@ -67,7 +66,11 @@ const App = props => {
 				)}
 				{!isActive && (
 					<>
-						<Button type="button" color="danger">Del</Button>
+						<Button
+							type="button"
+							color="danger"
+							onClick={() => dispatch(deleteTodo(id))}
+						>Del</Button>
 					</>
 				)}
 			</>

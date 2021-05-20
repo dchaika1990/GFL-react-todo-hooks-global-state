@@ -22,3 +22,8 @@ export const addTodo = (name) => ({
 	type: 'ADD_TODO',
 	payload: name
 });
+
+export const deleteTodo = (id) => ({
+	type: 'DELETE_TODO_ITEM',
+	payload: id
+});
