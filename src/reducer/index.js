@@ -47,7 +47,7 @@ const reducer = (state = initialState, action) => {
 			}
 			todos.in_progress.push(newTodoItem)
 			console.log(state)
-			return {...state, todos: todos};
+			return {...state, todos: {...todos}};
 		case 'DELETE_TODO_ITEM':
 			todos = state.todos;
 			const id = action.payload;
