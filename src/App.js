@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import List from './components/List';
 import ListItem from './components/ListItem';
@@ -24,19 +24,17 @@ const App = props => {
 	const [searchKey, setSearchKey] = useState('');
 
 	const filteredTodos = useMemo(() => {
-		console.log('use memo', todos)
-		// return todos?.filter(item => {
-		//
-		// })
-	}, [todos, setSearchKey])
-
-	const getTodo = useCallback(() => {
-		console.log('log getTodo', props.id);
-	}, [1]);
-
-	useEffect(() => {
-		getTodo();
-	}, [setSearchKey]);
+		if (searchKey) {
+			let filterTodos = {};
+			Object.keys(todos).forEach(key => {
+				let filterTodo = todos[key].filter(item => item.name.toLowerCase().includes(searchKey.toLowerCase()))
+				filterTodos[key] = []
+				filterTodos[key].push(...filterTodo)
+			})
+			return filterTodos
+		}
+		return todos
+	}, [todos, searchKey])
 
 	const addTodoHandler = (e) => {
 		e.preventDefault();
@@ -127,10 +125,10 @@ const App = props => {
 						loading
 					) : (
 						<List>
-							{todos.in_progress.map((item, index) => {
+							{filteredTodos.in_progress.map((item, index) => {
 								const {id, isActive} = item;
 
-								if (isActive && todos.in_progress[index + 1]) todos.in_progress[index + 1].nextElement = true;
+								if (isActive && filteredTodos.in_progress[index + 1]) filteredTodos.in_progress[index + 1].nextElement = true;
 
 								return (
 									<ListItem
@@ -142,7 +140,7 @@ const App = props => {
 							})}
 						</List>
 					)}
-					<p>Things to do: {todos?.in_progress.length}</p>
+					<p>Things to do: {filteredTodos?.in_progress.length}</p>
 				</Col>
 				<Col sm="6">
 					<h3>Done</h3>
@@ -151,13 +149,13 @@ const App = props => {
 						loading
 					) : (
 						<List>
-							{todos.done.map(({id, ...item}) => (
+							{filteredTodos.done.map(({id, ...item}) => (
 								<ListItem key={id} item={item} render={renderDoneItem}/>
 							))}
 						</List>
 					)}
 
-					<p>Done: {todos?.done.length}</p>
+					<p>Done: {filteredTodos?.done.length}</p>
 				</Col>
 			</Row>
 		</Container>
