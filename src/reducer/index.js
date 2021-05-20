@@ -7,18 +7,17 @@ const reducer = (state = initialState, action) => {
 	let todos;
 	switch (action.type) {
 		case 'FETCH_TODOS_START':
-			todos = state.todos;
+			todos = {...state.todos};
 			return {...state, fetching: true};
 		case 'FETCH_TODOS_END':
-			todos = state.todos;
+			todos = {...state.todos};
 			return {...state, fetching: false};
 		case 'SET_TODOS':
-			todos = state.todos;
-			console.log(state)
+			todos = {...state.todos};
 			return {...state, todos: action.payload};
 		case 'MAKE_ACTIVE':
-			todos = state.todos;
-			console.log(state)
+			todos = {...state.todos};
+
 			const updatedTodosInProgress = state.todos.in_progress.filter(item => !item.isActive).map(item => ({
 				...item,
 				isActive: item.id === action.payload,
@@ -39,7 +38,7 @@ const reducer = (state = initialState, action) => {
 				}
 			};
 		case 'ADD_TODO':
-			todos = state.todos;
+			todos = {...state.todos};
 			const newTodoItem = {
 				id: Date.now(),
 				name: action.payload,
@@ -47,9 +46,9 @@ const reducer = (state = initialState, action) => {
 			}
 			todos.in_progress.push(newTodoItem)
 			console.log(state)
-			return {...state, todos: {...todos}};
+			return {...state, todos: todos};
 		case 'DELETE_TODO_ITEM':
-			todos = state.todos;
+			todos = {...state.todos};
 			const id = action.payload;
 			const newItemsInProgress = todos.in_progress.filter(item => item.id !== id);
 			const newTodo = {
