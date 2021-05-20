@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import List from './components/List';
-import ListItem from './components/ListItem';
+import List from './components/list-component';
+import ListItem from './components/list-item-component';
 import {Badge, Button, Container, Row, Col, Form, FormGroup, Label, Input} from 'reactstrap'
 import {setTodos, startLoad, endLoad, addTodo, deleteTodo, makeActive} from './actions';
 
@@ -28,6 +28,7 @@ const App = props => {
 			let filterTodos = {};
 			Object.keys(todos).forEach(key => {
 				let filterTodo = todos[key].filter(item => item.name.toLowerCase().includes(searchKey.toLowerCase()))
+				console.log(...filterTodo)
 				filterTodos[key] = []
 				filterTodos[key].push(...filterTodo)
 			})
@@ -127,9 +128,8 @@ const App = props => {
 						<List>
 							{filteredTodos.in_progress.map((item, index) => {
 								const {id, isActive} = item;
-
-								if (isActive && filteredTodos.in_progress[index + 1]) filteredTodos.in_progress[index + 1].nextElement = true;
-
+								// if (isActive && filteredTodos.in_progress[index + 1]) filteredTodos.in_progress[index + 1].nextElement = true;
+								if (isActive && todos.in_progress[index + 1]) todos.in_progress[index + 1].nextElement = true;
 								return (
 									<ListItem
 										key={id}
