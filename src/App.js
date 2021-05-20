@@ -1,19 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import List from './components/List';
 import ListItem from './components/ListItem';
 import {Badge, Button, Container, Row, Col, Form, FormGroup, Label, Input} from 'reactstrap'
-
 import {setTodos, startLoad, endLoad, addTodo, deleteTodo} from './actions';
-// import * as actions from './actions';
-// import {addTodo} from "./actions";
-
 
 const App = props => {
-	const {fetching} = props;
 	const dispatch = useDispatch();
-	console.log(props)
 	let todos = useSelector(state => state.todos);
+	let fetching = useSelector(state => state.fetching);
 
 	useEffect(() => {
 		fetch('/todos.json')
@@ -111,7 +106,7 @@ const App = props => {
 							{todos.in_progress.map((item, index) => {
 								const {id, isActive} = item;
 
-								if (isActive) todos.in_progress[index + 1].nextElement = true;
+								if (isActive && todos.in_progress[index + 1]) todos.in_progress[index + 1].nextElement = true;
 
 								return (
 									<ListItem
@@ -145,9 +140,5 @@ const App = props => {
 	);
 };
 
-const mapStateToProps = state => ({
-	fetching: state.fetching,
-	todos: state.todos,
-});
 
-export default connect(mapStateToProps)(App);
+export default App;
