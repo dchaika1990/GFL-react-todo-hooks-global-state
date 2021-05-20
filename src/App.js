@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import List from './components/List';
 import ListItem from './components/ListItem';
@@ -21,23 +21,28 @@ const App = props => {
 	}, [])
 
 	const [newTodoName, setNewTodo] = useState('');
+	const [searchKey, setSearchKey] = useState('');
+
+	const filteredTodos = useMemo(() => {
+		console.log('use memo', todos)
+		// return todos?.filter(item => {
+		//
+		// })
+	}, [todos, setSearchKey])
+
+	const getTodo = useCallback(() => {
+		console.log('log getTodo', props.id);
+	}, [1]);
+
+	useEffect(() => {
+		getTodo();
+	}, [setSearchKey]);
 
 	const addTodoHandler = (e) => {
 		e.preventDefault();
 		dispatch(addTodo(newTodoName))
 		setNewTodo('');
 	}
-
-	useEffect(() => {
-		// setNewTodo(state => ({
-		// 	...state,
-		// 	in_progress:
-		// }))
-		// setTodoList(state => ({
-		// 	...state,
-		// 	done: todos.done,
-		// }));
-	}, [todos]);
 
 	const loading = <p>Loading...</p>;
 
@@ -79,6 +84,21 @@ const App = props => {
 	return (
 		<Container>
 			<h1>Todo React APP</h1>
+			<h2>Todos search</h2>
+			<Row>
+				<Col>
+					<Input
+						id='addInput'
+						type='text'
+						className='form-control'
+						placeholder='Search todos'
+						value={searchKey}
+						onChange={(e)=>setSearchKey(e.target.value)}
+					/>
+				</Col>
+			</Row>
+			<hr/>
+			<h2>Todos</h2>
 			<Row>
 				<Col>
 					<Form onSubmit={addTodoHandler}>
