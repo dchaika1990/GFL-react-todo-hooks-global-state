@@ -13,18 +13,25 @@ const reducer = (state = initialState, action) => {
 		case 'SET_TODOS':
 			return {...state, todos: action.payload};
 		case 'MAKE_ACTIVE':
-			const doneTodoItem = state.todos.in_progress.filter(item => item.isActive)
-			doneTodoItem[0].finishedTime = new Date().toUTCString()
-			state.todos.done.push(doneTodoItem[0])
 			const updatedTodosInProgress = state.todos.in_progress.filter(item => !item.isActive).map(item => ({
-			  ...item,
+				...item,
 				isActive: item.id === action.payload,
+				startime: item.id === action.payload && new Date().toISOString(),
+				nextElement: item.id === action.payload && false,
 			}));
 
-			return {state, todos: {
+			const doneTodoItem = state.todos.in_progress.filter(item => item.isActive)
+			doneTodoItem[0].finishedTime = new Date().toISOString()
+			doneTodoItem[0].isActive = false
+			delete doneTodoItem[0].nextElement
+			state.todos.done.push(doneTodoItem[0])
+
+			return {
+				state, todos: {
 					...todos,
 					in_progress: updatedTodosInProgress
-				}};
+				}
+			};
 		case 'ADD_TODO':
 			const newTodoItem = {
 				id: Date.now(),
