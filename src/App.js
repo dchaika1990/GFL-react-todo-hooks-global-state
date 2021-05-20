@@ -12,7 +12,6 @@ const App = props => {
 	let fetching = useSelector(state => state.fetching);
 
 	const [searchKey, setSearchKey] = useState('');
-	const [newTodoName, setNewTodo] = useState('');
 
 	useEffect(() => {
 		fetch('/todos.json')
@@ -59,10 +58,7 @@ const App = props => {
 			<h2>Todos</h2>
 			<Row>
 				<Col>
-					<AddNewComponent
-						newTodoName={newTodoName}
-						setNewTodo={setNewTodo}
-					/>
+					<AddNewComponent />
 				</Col>
 			</Row>
 			<hr/>

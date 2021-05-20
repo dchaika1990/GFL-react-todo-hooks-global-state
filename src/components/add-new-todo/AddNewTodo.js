@@ -1,9 +1,11 @@
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import {addTodo} from "../../actions";
 import {useDispatch} from "react-redux";
+import {useState} from "react";
 
-export default function AddNewComponent({newTodoName, setNewTodo}) {
+export default function AddNewComponent() {
 	let dispatch = useDispatch();
+	const [newTodoName, setNewTodo] = useState('');
 
 	return (
 		<Form>
