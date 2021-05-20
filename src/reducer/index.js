@@ -13,17 +13,18 @@ const reducer = (state = initialState, action) => {
 		case 'SET_TODOS':
 			return {...state, todos: action.payload};
 		case 'MAKE_ACTIVE':
-			const itemIdx = todos.findIndex(item => item.id === action.payload);
+			const doneTodoItem = state.todos.in_progress.filter(item => item.isActive)
+			doneTodoItem[0].finishedTime = new Date().toUTCString()
+			state.todos.done.push(doneTodoItem[0])
+			const updatedTodosInProgress = state.todos.in_progress.filter(item => !item.isActive).map(item => ({
+			  ...item,
+				isActive: item.id === action.payload,
+			}));
 
-			if (itemIdx === -1) return state;
-
-			const updatedTodos = todos.slice();
-			const item = {...todos[itemIdx]};
-			item.isActive = true;
-			item.startTime = new Date().toUTCString();
-			updatedTodos.splice(itemIdx, 1, item);
-
-			return {state, todos: updatedTodos};
+			return {state, todos: {
+					...todos,
+					in_progress: updatedTodosInProgress
+				}};
 		case 'ADD_TODO':
 			const newTodoItem = {
 				id: Date.now(),
@@ -31,7 +32,7 @@ const reducer = (state = initialState, action) => {
 				isActive: false
 			}
 			todos.in_progress.push(newTodoItem)
-			console.log({...state, todos: todos})
+
 			return {...state, todos: todos};
 		case 'DELETE_TODO_ITEM':
 			const id = action.payload;
@@ -40,6 +41,7 @@ const reducer = (state = initialState, action) => {
 				in_progress: newItemsInProgress,
 				done: todos.done
 			}
+
 			return {...state, todos: newTodo}
 		default:
 			return state;

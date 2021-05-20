@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import List from './components/List';
 import ListItem from './components/ListItem';
 import {Badge, Button, Container, Row, Col, Form, FormGroup, Label, Input} from 'reactstrap'
-import {setTodos, startLoad, endLoad, addTodo, deleteTodo} from './actions';
+import {setTodos, startLoad, endLoad, addTodo, deleteTodo, makeActive} from './actions';
 
 const App = props => {
 	const dispatch = useDispatch();
@@ -54,9 +54,13 @@ const App = props => {
 		return (
 			<>
 				{name}
-				{nextElement && (
+				{nextElement && !isActive && (
 					<>
-						<Button type="button" color="primary">Start</Button>
+						<Button
+							type="button"
+							color="primary"
+							onClick={(e) => dispatch(makeActive(id))}
+						>Start</Button>
 					</>
 				)}
 				{!isActive && (
