@@ -1,7 +1,7 @@
 import List from "../list-component";
 import ListItem from "../list-item-component";
 import {Button} from "reactstrap";
-import {deleteTodo, makeActive} from "../../actions";
+import {deleteTodo, makeActive, makeDoneLastItem} from "../../actions";
 import {useDispatch} from "react-redux";
 
 export default function TodoInProgress({fetching, loading, filteredTodos, todos}) {
@@ -52,6 +52,13 @@ export default function TodoInProgress({fetching, loading, filteredTodos, todos}
 				</List>
 			)}
 			<p>Things to do: {filteredTodos?.in_progress.length}</p>
+			{ todos?.in_progress.length === 1 && (
+				<Button
+					type="button"
+					color="primary"
+					onClick={() => dispatch(makeDoneLastItem())}
+				>Completed</Button>
+			)}
 		</>
 	)
 }

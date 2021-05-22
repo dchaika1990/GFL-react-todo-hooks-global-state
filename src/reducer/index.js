@@ -45,7 +45,6 @@ const reducer = (state = initialState, action) => {
 				isActive: false
 			}
 			todos.in_progress.push(newTodoItem)
-			console.log(state)
 			return {...state, todos: todos};
 		case 'DELETE_TODO_ITEM':
 			todos = {...state.todos};
@@ -57,6 +56,17 @@ const reducer = (state = initialState, action) => {
 			}
 
 			return {...state, todos: newTodo}
+		case 'MAKE_DONE_LAST_ITEM':
+			todos = {...state.todos};
+			const doneTodoItemLast = state.todos.in_progress[0]
+			doneTodoItemLast.finishedTime = new Date().toISOString()
+			doneTodoItemLast.isActive = false
+			delete doneTodoItemLast.nextElement
+			state.todos.done.push(doneTodoItemLast)
+			return {...state, todos: {
+				in_progress: todos.in_progress.slice(1),
+				done: todos.done
+			}};
 		default:
 			return state;
 	}
