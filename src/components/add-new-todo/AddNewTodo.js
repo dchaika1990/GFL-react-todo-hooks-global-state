@@ -25,8 +25,10 @@ export default function AddNewComponent() {
 				color="success"
 				className='pull-right'
 				onClick={() => {
-					dispatch(addTodo(newTodoName));
-					setNewTodo('');
+					if (newTodoName.trim()) {
+						dispatch(addTodo(newTodoName));
+						setNewTodo('');
+					}
 				}
 			}>
 				Add New Item

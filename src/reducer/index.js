@@ -42,7 +42,7 @@ const reducer = (state = initialState, action) => {
 			const newTodoItem = {
 				id: Date.now(),
 				name: action.payload,
-				isActive: false
+				isActive: !todos.in_progress.length
 			}
 			todos.in_progress.push(newTodoItem)
 			return {...state, todos: todos};

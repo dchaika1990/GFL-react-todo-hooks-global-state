@@ -10,6 +10,7 @@ import App from "./App";
 
 let store = createStore(reducer);
 
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
